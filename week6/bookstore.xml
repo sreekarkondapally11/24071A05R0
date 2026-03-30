@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE bookstore SYSTEM "bookstore.dtd">
+
+<bookstore xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="bookstore.xsd">
+
+    <book category="programming">
+        <title>Java Fundamentals</title>
+        <author>James Gosling</author>
+        <year>2022</year>
+        <price>599.50</price>
+    </book>
+
+    <book category="database">
+        <title>Mastering MySQL</title>
+        <author>Michael Widenius</author>
+        <year>2021</year>
+        <price>450.00</price>
+    </book>
+
+</bookstore>

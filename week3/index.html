@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping Cart App</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { margin: 0; background: #f4f4f4; }
+
+    /* Layout */
+    .container { max-width: 1100px; margin: auto; padding: 1rem; }
+    header { background: #222; color: #fff; padding: 1rem; display: flex; justify-content: space-between; }
+    header button { background: #fff; border: none; padding: 0.4rem 0.7rem; cursor: pointer; }
+
+    /* Forms */
+    form { max-width: 400px; margin: 2rem auto; background: #fff; padding: 1.5rem; border-radius: 5px; }
+    input { width: 100%; padding: 0.6rem; margin: 0.5rem 0; }
+    .error { color: red; font-size: 0.85rem; }
+
+    /* Catalog */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .card { background: #fff; padding: 1rem; border-radius: 5px; display: flex; flex-direction: column; }
+    .card button { margin-top: auto; }
+
+    /* Cart */
+    .cart { background: #fff; padding: 1rem; margin-top: 1rem; }
+    .cart-item { display: flex; justify-content: space-between; }
+
+    /* Utility */
+    .hidden { display: none; }
+    button { padding: 0.5rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>My Shop</div>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<!-- Registration -->
+<form id="registerForm">
+  <h3>Register</h3>
+  <input id="rUser" placeholder="Username" />
+  <input id="rPass" type="password" placeholder="Password" />
+  <div class="error" id="rErr"></div>
+  <button type="submit">Register</button>
+</form>
+
+<!-- Login -->
+<form id="loginForm" class="hidden">
+  <h3>Login</h3>
+  <input id="lUser" placeholder="Username" />
+  <input id="lPass" type="password" placeholder="Password" />
+  <div class="error" id="lErr"></div>
+  <button type="submit">Login</button>
+</form>
+
+<!-- Catalog -->
+<div id="shop" class="container hidden">
+  <h2>Catalog</h2>
+  <div class="grid" id="products"></div>
+
+  <div class="cart">
+    <h3>Cart</h3>
+    <div id="cart"></div>
+  </div>
+</div>
+
+<script>
+  const products = [
+    { id: 1, name: "Phone", price: 500 },
+    { id: 2, name: "Laptop", price: 1000 },
+    { id: 3, name: "Headphones", price: 150 }
+  ];
+
+  let cart = [];
+
+  // Registration
+  registerForm.onsubmit = e => {
+    e.preventDefault();
+    if (!rUser.value || !rPass.value) {
+      rErr.textContent = "All fields required";
+      return;
+    }
+    localStorage.setItem("user", rUser.value);
+    localStorage.setItem("pass", rPass.value);
+    registerForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+  };
+
+  // Login
+  loginForm.onsubmit = e => {
+    e.preventDefault();
+    if (lUser.value !== localStorage.getItem("user") || lPass.value !== localStorage.getItem("pass")) {
+      lErr.textContent = "Invalid credentials";
+      return;
+    }
+    loginForm.classList.add("hidden");
+    shop.classList.remove("hidden");
+    loadProducts();
+  };
+
+  function loadProducts() {
+    products.forEach(p => {
+      productsDiv = document.createElement("div");
+      productsDiv.className = "card";
+      productsDiv.innerHTML = `<h4>${p.name}</h4><p>₹${p.price}</p><button onclick="addToCart(${p.id})">Add</button>`;
+      document.getElementById("products").appendChild(productsDiv);
+    });
+  }
+
+  function addToCart(id) {
+    cart.push(products.find(p => p.id === id));
+    renderCart();
+  }
+
+  function renderCart() {
+    cartDiv.innerHTML = "";
+    cart.forEach(c => {
+      cartDiv.innerHTML += `<div class='cart-item'><span>${c.name}</span><span>₹${c.price}</span></div>`;
+    });
+  }
+
+  function logout() {
+    location.reload();
+  }
+</script>
+</body>
+</html>
